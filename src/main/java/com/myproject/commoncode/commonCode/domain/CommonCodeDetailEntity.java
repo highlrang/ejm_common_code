@@ -9,19 +9,32 @@ import javax.validation.constraints.NotNull;
 
 import com.myproject.commoncode.core.domain.BaseEntity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
+/*
+ * common_code_detail과 common_code는 다대일 연관관계
+ * JPA 연관관계 매핑
+ * @JoinColumn(name = "common_code_Id")
+ * @ManyToOne(fetch=FetchType.LAZY)
+ * private CommonCodeEntity commonCode;
+ */
 @Getter
 @Entity
-@Table(name = "COMMON_CODE_DETAIL")
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "COMMON_CODE_DETAIL")
 public class CommonCodeDetailEntity extends BaseEntity{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commonCodeDetailId;
+
+    private long commonCodeId;
 
     @NotNull
     private String commonCodeDetailName;
@@ -29,4 +42,8 @@ public class CommonCodeDetailEntity extends BaseEntity{
     @NotNull
     private String commonCodeDetailDisplayName;
     
+    public void update(String commonCodeDetailName, String commonCodeDetailDisplayName){
+        this.commonCodeDetailName = commonCodeDetailName;
+        this.commonCodeDetailDisplayName = commonCodeDetailDisplayName;
+    }
 }

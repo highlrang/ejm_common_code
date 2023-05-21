@@ -3,6 +3,7 @@ package com.myproject.commoncode.commonCode.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,9 @@ public class CommonCodeService {
     
     private final CommonCodeRepository commonCodeRepository;
 
-    public List<CommonCodeDto> getCommonCodes(){
-        return commonCodeRepository.findAll()
-                                        .stream()
-                                        .map(CommonCodeDto::new)
-                                        .collect(Collectors.toList());
+    public List<CommonCodeDto> getCommonCodes(CommonCodeDto commonCodeDto, Pageable pageable){        
+        // TODO querydsl
+        return null; 
     }
 
     @Transactional

@@ -14,6 +14,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+// TODO 확인
+/*
+ * common_code_detail과 일대다 관계
+ * common_code_detail이 주인 테이블
+ * JPA 연관관계를 추가한다면
+ * @OneToMany(mappedBy="commonCode", cascade=CascadeType.PERSIST)
+ * private List<CommonCodeDetailEntity> commonCodeDetails = new ArrayList<>();
+ */
 @Getter
 @Entity
 @Table(name = "COMMON_CODE")
