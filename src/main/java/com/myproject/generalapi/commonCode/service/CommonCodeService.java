@@ -38,7 +38,7 @@ public class CommonCodeService {
 
     @Transactional
     public CommonCodeResponseDto updateCommonCode(long commonCodeId, CommonCodeRequestDto commonCodeDto){
-        CommonCodeEntity commonCodeEntity = commonCodeRepository.findByIdAndDeleteYn(commonCodeId, "N")
+        CommonCodeEntity commonCodeEntity = commonCodeRepository.findByCommonCodeIdAndDeleteYn(commonCodeId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         commonCodeEntity.update(commonCodeDto.getCommonCodeName(), commonCodeDto.getCommonCodeDisplayName());
         return new CommonCodeResponseDto(commonCodeEntity);
@@ -47,7 +47,7 @@ public class CommonCodeService {
     @Transactional
     public void deleteCommonCode(long commonCodeId) {
         commonCodeDetailRepository.deleteAllByCommonCodeId(commonCodeId);
-        CommonCodeEntity commonCodeEntity = commonCodeRepository.findByIdAndDeleteYn(commonCodeId, "N")
+        CommonCodeEntity commonCodeEntity = commonCodeRepository.findByCommonCodeIdAndDeleteYn(commonCodeId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         commonCodeEntity.delete();
     }

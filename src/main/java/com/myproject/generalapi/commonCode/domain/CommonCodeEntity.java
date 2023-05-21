@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// TODO 확인
 /*
  * common_code_detail과 일대다 관계
  * common_code_detail이 주인 테이블

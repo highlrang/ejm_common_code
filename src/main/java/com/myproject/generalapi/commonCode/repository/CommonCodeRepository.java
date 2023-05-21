@@ -10,7 +10,7 @@ import com.myproject.generalapi.commonCode.domain.CommonCodeEntity;
 
 public interface CommonCodeRepository extends JpaRepository<CommonCodeEntity, Long>, CommonCodeQueryRepository{
     
-    Optional<CommonCodeEntity> findByIdAndDeleteYn(long commonCodeId, String deleteYn);
+    Optional<CommonCodeEntity> findByCommonCodeIdAndDeleteYn(long commonCodeId, String deleteYn);
     Page<CommonCodeEntity> findAllByDeleteYn(String deleteYn, Pageable pageable);
     
 }

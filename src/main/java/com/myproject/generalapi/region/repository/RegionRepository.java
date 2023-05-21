@@ -8,5 +8,5 @@ import com.myproject.generalapi.region.domain.RegionEntity;
 
 public interface RegionRepository extends JpaRepository<RegionEntity, Long>, RegionQueryRepository {
     
-    Optional<RegionEntity> findByIdAndDeleteYn(long regionId, String deleteYn);
+    Optional<RegionEntity> findByRegionIdAndDeleteYn(long regionId, String deleteYn);
 }

@@ -25,7 +25,7 @@ public class RegionService {
     }
 
     public RegionResponseDto getRegion(long regionId) {
-        RegionEntity regionEntity = regionRepository.findByIdAndDeleteYn(regionId, "N")
+        RegionEntity regionEntity = regionRepository.findByRegionIdAndDeleteYn(regionId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
 
         return new RegionResponseDto(regionEntity);
@@ -45,7 +45,7 @@ public class RegionService {
 
     @Transactional
     public RegionResponseDto updateRegion(long regionId, RegionRequestDto regionDto) {
-        RegionEntity regionEntity = regionRepository.findByIdAndDeleteYn(regionId, "N")
+        RegionEntity regionEntity = regionRepository.findByRegionIdAndDeleteYn(regionId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         
         regionEntity.update(regionDto.getRegionName());
@@ -54,7 +54,7 @@ public class RegionService {
 
     @Transactional
 	public void deleteRegion(long regionId) {
-        RegionEntity regionEntity = regionRepository.findById(regionId)
+        RegionEntity regionEntity = regionRepository.findByRegionIdAndDeleteYn(regionId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         regionEntity.delete();
 	}

@@ -34,7 +34,7 @@ public class CommonCodeController {
                                                         commonCodeService.getCommonCodes(commonCodeDto, pageable)
                                                     ));
     }
-    // TODO dto null exception handling
+    
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createCommonCode(@RequestBody CommonCodeRequestDto commonCodeDto){
         return ResponseEntity.ok(ApiResponse.success(

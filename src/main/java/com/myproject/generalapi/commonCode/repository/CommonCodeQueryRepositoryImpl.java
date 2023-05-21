@@ -34,7 +34,6 @@ public class CommonCodeQueryRepositoryImpl implements CommonCodeQueryRepository 
 
         long commonCodeCnt = countAll();
 
-        // TODO 정렬 추가
         JPAQuery<CommonCodeResponseDto> queryBuilder = jpaQueryFactory.select(
                 Projections.constructor(CommonCodeResponseDto.class, 
                                             commonCodeEntity.commonCodeId, 
@@ -52,6 +51,7 @@ public class CommonCodeQueryRepositoryImpl implements CommonCodeQueryRepository 
         }
 
         List<CommonCodeResponseDto> commonCodeDtos = queryBuilder    
+            .orderBy(commonCodeEntity.commonCodeId.asc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

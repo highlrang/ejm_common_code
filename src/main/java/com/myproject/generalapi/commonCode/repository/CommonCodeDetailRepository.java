@@ -9,10 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.myproject.generalapi.commonCode.domain.CommonCodeDetailEntity;
 
 public interface CommonCodeDetailRepository extends JpaRepository<CommonCodeDetailEntity, Long>, CommonCodeDetailQueryRepository {
-
-    Optional<CommonCodeDetailEntity> findByIdAndDeleteYn(long commonCodeDetailId, String deleteYn);
     
-    Page<CommonCodeDetailEntity> findAllByDeleteYn(String deleteYn, Pageable pageable);
+    Page<CommonCodeDetailEntity> findAllByDeleteYnOrderByCommonCodeId(String deleteYn, Pageable pageable);
 
     Page<CommonCodeDetailEntity> findAllByCommonCodeIdAndDeleteYn(long commonCodeId, String deleteYn, Pageable pageable);
+
+    Optional<CommonCodeDetailEntity> findByCommonCodeDetailIdAndDeleteYn(long commonCodeDetailId, String deleteYn);
 }

@@ -28,9 +28,8 @@ public class CommonCodeDetailService {
     private final CommonCodeRepository commonCodeRepository;
     private final CommonCodeDetailRepository commonCodeDetailRepository;
 
-    // TODO detail res에 common code name 추가하기
     public CommonCodeDetailPageDto getCommonCodeDetails(Pageable pageable) {
-        Page<CommonCodeDetailEntity> commonCodeDetailPages = commonCodeDetailRepository.findAllByDeleteYn("N", pageable);
+        Page<CommonCodeDetailEntity> commonCodeDetailPages = commonCodeDetailRepository.findAllByDeleteYnOrderByCommonCodeId("N", pageable);
         List<CommonCodeDetailResponseDto> commonCodeDetailDtos = commonCodeDetailPages.getContent()
             .stream()
             .map(CommonCodeDetailResponseDto::new)
@@ -55,7 +54,7 @@ public class CommonCodeDetailService {
     @Transactional
     public CommonCodeDetailResponseDto saveCommonCodeDetail(CommonCodeDetailRequestDto commonCodeDetailDto) {
         long commonCodeId = commonCodeDetailDto.getCommonCodeId();
-        CommonCodeEntity commonCodeEntity = commonCodeRepository.findByIdAndDeleteYn(commonCodeId, "N")
+        CommonCodeEntity commonCodeEntity = commonCodeRepository.findByCommonCodeIdAndDeleteYn(commonCodeId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         
         CommonCodeDetailEntity commonCodeDetailEntity = CommonCodeDetailEntity.builder()
@@ -69,7 +68,7 @@ public class CommonCodeDetailService {
 
     @Transactional
     public CommonCodeDetailResponseDto updateCommonCodeDetail(long commonCodeDetailId, CommonCodeDetailRequestDto commonCodeDetailDto) {
-        CommonCodeDetailEntity commonCodeDetailEntity = commonCodeDetailRepository.findByIdAndDeleteYn(commonCodeDetailId, "N")
+        CommonCodeDetailEntity commonCodeDetailEntity = commonCodeDetailRepository.findByCommonCodeDetailIdAndDeleteYn(commonCodeDetailId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         commonCodeDetailEntity.update(commonCodeDetailDto.getCommonCodeDetailName(), commonCodeDetailDto.getCommonCodeDetailDisplayName());
         return new CommonCodeDetailResponseDto(commonCodeDetailEntity);
@@ -77,7 +76,7 @@ public class CommonCodeDetailService {
 
     @Transactional
     public void deleteCommonCodeDetail(long commonCodeDetailId) {
-        CommonCodeDetailEntity commonCodeDetailEntity = commonCodeDetailRepository.findByIdAndDeleteYn(commonCodeDetailId, "N")
+        CommonCodeDetailEntity commonCodeDetailEntity = commonCodeDetailRepository.findByCommonCodeDetailIdAndDeleteYn(commonCodeDetailId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         commonCodeDetailEntity.delete();
     }

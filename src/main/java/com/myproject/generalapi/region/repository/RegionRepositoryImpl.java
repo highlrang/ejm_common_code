@@ -47,7 +47,13 @@ public class RegionRepositoryImpl implements RegionQueryRepository {
             );
         }
 
-        List<RegionResponseDto> regionDtos = queryBuilder.offset(pageable.getOffset())
+        List<RegionResponseDto> regionDtos = queryBuilder
+                                                .orderBy(
+                                                    regionEntity.regionDepth.asc(), 
+                                                    regionEntity.regionParentId.asc(),
+                                                    regionEntity.regionId.asc()
+                                                    )
+                                                .offset(pageable.getOffset())
                                                 .limit(pageable.getPageSize())
                                                 .fetch();
 
