@@ -1,3 +1,5 @@
+# 공통 코드 어플리케이션
+
 # MYSQL 
 ## 데이터베이스
 - 데이터베이스명은 `assignment`로 설정해두었습니다. <br>
@@ -411,11 +413,14 @@ CommonCodeDetail API Spec.
 |||size|int|페이지 사이즈
 
 <br>
+
 --------------------------------------------
+
 <br>
 
+
 <h3>POST /api/v1/common-code-detail/list/{commonCodeId}</h3>
-- 상세 공통 코드 목록 조회
+- 공통 코드 그룹 아이디로 상세 공통 코드 목록 조회
 <br><br>
 
 <b>uri path</b>
@@ -482,16 +487,22 @@ CommonCodeDetail API Spec.
 ||commonCodeDetailName|String|상세코드명
 ||commonCodeDetailDisplayName|String|상세코드전시명
 
+<br>
+
 --------------------------------------------
+
 <br>
 
 <h3>PATCH /api/v1/common-code-detail/update/{commonCodeDetailId}</h3>
 - 상세 공통 코드 수정
-<br><br>
+
+<br>
+
 <b>uri path</b>
 |column | type | description | required |
 |-------|------|-------------|----------|
 |commonCodeDetailId|int|상세코드아이디|O|
+
 
 <b>request</b>
 
