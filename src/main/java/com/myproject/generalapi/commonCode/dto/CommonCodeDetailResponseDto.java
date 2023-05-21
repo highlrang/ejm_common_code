@@ -7,14 +7,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CommonCodeDetailDto {
-    
-    private long commonCodeId;
+public class CommonCodeDetailResponseDto {
+
     private long commonCodeDetailId;
+    private long commonCodeId;
+    private String commonCodeName;
     private String commonCodeDetailName;
     private String commonCodeDetailDisplayName;
 
-    public CommonCodeDetailDto(CommonCodeDetailEntity e){
+
+    public CommonCodeDetailResponseDto(CommonCodeDetailEntity e){
         this.commonCodeId = e.getCommonCodeId();
         this.commonCodeDetailId = e.getCommonCodeDetailId();
         this.commonCodeDetailName = e.getCommonCodeDetailName();

@@ -9,13 +9,17 @@ import javax.validation.constraints.NotNull;
 
 import com.myproject.generalapi.common.domain.BaseEntity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "REGION")
-@NoArgsConstructor
 public class RegionEntity extends BaseEntity{
     
     @Id
@@ -29,4 +33,7 @@ public class RegionEntity extends BaseEntity{
 
     private long regionParentId;
     
+    public void update(String regionName){
+        this.regionName = regionName;
+    }
 }

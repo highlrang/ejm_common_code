@@ -8,20 +8,20 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CommonCodeDto {
-
+public class CommonCodeResponseDto {
+    
     private long commonCodeId;
     private String commonCodeName;
     private String commonCodeDisplayName;
 
-    public CommonCodeDto(CommonCodeEntity e){
+    public CommonCodeResponseDto(CommonCodeEntity e){
         this.commonCodeId = e.getCommonCodeId();
         this.commonCodeName = e.getCommonCodeName();
         this.commonCodeDisplayName = e.getCommonCodeDisplayName();
     }
 
     @QueryProjection
-    public CommonCodeDto(long commonCodeId, String commonCodeName, String commonCodeDisplayName) {
+    public CommonCodeResponseDto(long commonCodeId, String commonCodeName, String commonCodeDisplayName) {
         this.commonCodeId = commonCodeId;
         this.commonCodeName = commonCodeName;
         this.commonCodeDisplayName = commonCodeDisplayName;

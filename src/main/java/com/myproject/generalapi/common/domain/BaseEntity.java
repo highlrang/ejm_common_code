@@ -15,4 +15,8 @@ public abstract class BaseEntity {
     private LocalDateTime createDate;
     private String updateBy;
     private LocalDateTime updateDate;
+
+    public void delete(){
+        this.deleteYn = "Y";
+    }
 }

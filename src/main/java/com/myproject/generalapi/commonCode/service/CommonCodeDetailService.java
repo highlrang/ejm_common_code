@@ -4,16 +4,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.myproject.generalapi.common.dto.PageDto;
 import com.myproject.generalapi.common.enums.CommonStatus;
 import com.myproject.generalapi.common.exception.CustomException;
 import com.myproject.generalapi.commonCode.domain.CommonCodeDetailEntity;
 import com.myproject.generalapi.commonCode.domain.CommonCodeEntity;
-import com.myproject.generalapi.commonCode.dto.CommonCodeDetailDto;
+import com.myproject.generalapi.commonCode.dto.CommonCodeDetailPageDto;
+import com.myproject.generalapi.commonCode.dto.CommonCodeDetailRequestDto;
+import com.myproject.generalapi.commonCode.dto.CommonCodeDetailResponseDto;
 import com.myproject.generalapi.commonCode.repository.CommonCodeDetailRepository;
 import com.myproject.generalapi.commonCode.repository.CommonCodeRepository;
 
@@ -26,31 +28,34 @@ public class CommonCodeDetailService {
     private final CommonCodeRepository commonCodeRepository;
     private final CommonCodeDetailRepository commonCodeDetailRepository;
 
-    public PageImpl<CommonCodeDetailDto> getCommonCodeDetails(Pageable pageable) {
-        Page<CommonCodeDetailEntity> commonCodeDetailPages = commonCodeDetailRepository.findAll(pageable);
-        List<CommonCodeDetailDto> commonCodeDetailDtos = commonCodeDetailPages.getContent()
+    // TODO detail res에 common code name 추가하기
+    public CommonCodeDetailPageDto getCommonCodeDetails(Pageable pageable) {
+        Page<CommonCodeDetailEntity> commonCodeDetailPages = commonCodeDetailRepository.findAllByDeleteYn("N", pageable);
+        List<CommonCodeDetailResponseDto> commonCodeDetailDtos = commonCodeDetailPages.getContent()
             .stream()
-            .map(CommonCodeDetailDto::new)
+            .map(CommonCodeDetailResponseDto::new)
             .collect(Collectors.toList());
         
-        return new PageImpl<CommonCodeDetailDto>(commonCodeDetailDtos, pageable, commonCodeDetailPages.getTotalElements());
+        PageDto pages = new PageDto(commonCodeDetailPages.getTotalElements(), commonCodeDetailPages.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize());
+        return new CommonCodeDetailPageDto(commonCodeDetailDtos, pages);
     }
 
-    public Page<CommonCodeDetailDto> getCommonCodeDetails(long commonCodeId, Pageable pageable) {
-        Page<CommonCodeDetailEntity> commonCodeDetailPages = commonCodeDetailRepository.findAllByCommonCodeId(commonCodeId, pageable);
-        List<CommonCodeDetailDto> commonCodeDetailDtos = commonCodeDetailPages.getContent()
+    public CommonCodeDetailPageDto getCommonCodeDetails(long commonCodeId, Pageable pageable) {
+        Page<CommonCodeDetailEntity> commonCodeDetailPages = commonCodeDetailRepository.findAllByCommonCodeIdAndDeleteYn(commonCodeId, "N", pageable);
+        List<CommonCodeDetailResponseDto> commonCodeDetailDtos = commonCodeDetailPages.getContent()
             .stream()
-            .map(CommonCodeDetailDto::new)
+            .map(CommonCodeDetailResponseDto::new)
             .collect(Collectors.toList());
 
-        return new PageImpl<CommonCodeDetailDto>(commonCodeDetailDtos, pageable, commonCodeDetailPages.getTotalElements());
+        PageDto pages = new PageDto(commonCodeDetailPages.getTotalElements(), commonCodeDetailPages.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize());
+        return new CommonCodeDetailPageDto(commonCodeDetailDtos, pages);
 
     }
 
     @Transactional
-    public CommonCodeDetailDto saveCommonCodeDetail(CommonCodeDetailDto commonCodeDetailDto) {
+    public CommonCodeDetailResponseDto saveCommonCodeDetail(CommonCodeDetailRequestDto commonCodeDetailDto) {
         long commonCodeId = commonCodeDetailDto.getCommonCodeId();
-        CommonCodeEntity commonCodeEntity = commonCodeRepository.findById(commonCodeId)
+        CommonCodeEntity commonCodeEntity = commonCodeRepository.findByIdAndDeleteYn(commonCodeId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         
         CommonCodeDetailEntity commonCodeDetailEntity = CommonCodeDetailEntity.builder()
@@ -59,15 +64,22 @@ public class CommonCodeDetailService {
                                                                                 .commonCodeDetailDisplayName(commonCodeDetailDto.getCommonCodeDetailDisplayName())
                                                                                 .build();
         CommonCodeDetailEntity savedCommonCodeDetail = commonCodeDetailRepository.save(commonCodeDetailEntity);
-        return new CommonCodeDetailDto(savedCommonCodeDetail);
+        return new CommonCodeDetailResponseDto(savedCommonCodeDetail);
     }
 
     @Transactional
-    public CommonCodeDetailDto updateCommonCodeDetail(long commonCodeDetailId, CommonCodeDetailDto commonCodeDetailDto) {
-        CommonCodeDetailEntity commonCodeDetailEntity = commonCodeDetailRepository.findById(commonCodeDetailId)
+    public CommonCodeDetailResponseDto updateCommonCodeDetail(long commonCodeDetailId, CommonCodeDetailRequestDto commonCodeDetailDto) {
+        CommonCodeDetailEntity commonCodeDetailEntity = commonCodeDetailRepository.findByIdAndDeleteYn(commonCodeDetailId, "N")
             .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
         commonCodeDetailEntity.update(commonCodeDetailDto.getCommonCodeDetailName(), commonCodeDetailDto.getCommonCodeDetailDisplayName());
-        return new CommonCodeDetailDto(commonCodeDetailEntity);
+        return new CommonCodeDetailResponseDto(commonCodeDetailEntity);
+    }
+
+    @Transactional
+    public void deleteCommonCodeDetail(long commonCodeDetailId) {
+        CommonCodeDetailEntity commonCodeDetailEntity = commonCodeDetailRepository.findByIdAndDeleteYn(commonCodeDetailId, "N")
+            .orElseThrow(() -> new CustomException(CommonStatus.DATA_NOT_FOUND));
+        commonCodeDetailEntity.delete();
     }
 
     

@@ -7,11 +7,13 @@ import static com.myproject.generalapi.commonCode.domain.QCommonCodeEntity.*;
 
 import java.util.List;
 
-import com.myproject.generalapi.commonCode.domain.CommonCodeEntity;
-import com.myproject.generalapi.commonCode.dto.CommonCodeDto;
-import com.querydsl.core.annotations.QueryProjection;
+import com.myproject.generalapi.common.dto.PageDto;
+import com.myproject.generalapi.commonCode.dto.CommonCodePageDto;
+import com.myproject.generalapi.commonCode.dto.CommonCodeRequestDto;
+import com.myproject.generalapi.commonCode.dto.CommonCodeResponseDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -28,38 +30,47 @@ public class CommonCodeQueryRepositoryImpl implements CommonCodeQueryRepository 
             .fetchOne();
     }
 
-    @Override
-    public PageImpl<CommonCodeDto> searchAll(CommonCodeDto commonCodeDto, Pageable pageable) {
+    public CommonCodePageDto searchAll(CommonCodeRequestDto commonCodeDto, Pageable pageable) {
 
         long commonCodeCnt = countAll();
 
-        List<CommonCodeDto> commonCodeDtos = jpaQueryFactory.select(
-                Projections.constructor(CommonCodeDto.class, 
+        // TODO 정렬 추가
+        JPAQuery<CommonCodeResponseDto> queryBuilder = jpaQueryFactory.select(
+                Projections.constructor(CommonCodeResponseDto.class, 
                                             commonCodeEntity.commonCodeId, 
                                             commonCodeEntity.commonCodeName, 
                                             commonCodeEntity.commonCodeDisplayName
                                         ))
             .from(commonCodeEntity)
-            .where(
+            .where(commonCodeEntity.deleteYn.eq("N"));
+
+        if(commonCodeDto != null){
+            queryBuilder = queryBuilder.where(
                 likeCommonCodeName(commonCodeDto.getCommonCodeName()),
                 likeCommonCodeDisplayName(commonCodeDto.getCommonCodeName())
-            )
+            );
+        }
+
+        List<CommonCodeResponseDto> commonCodeDtos = queryBuilder    
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
 
-        return new PageImpl<CommonCodeDto>(commonCodeDtos, pageable, commonCodeCnt);
+        PageImpl<CommonCodeResponseDto> commonCodePages = new PageImpl<CommonCodeResponseDto>(commonCodeDtos, pageable, commonCodeCnt);
+
+        PageDto pages = new PageDto(commonCodeCnt, commonCodePages.getTotalPages(), pageable.getPageNumber(), pageable.getPageSize());
+        return new CommonCodePageDto(commonCodeDtos, pages);
         
     }
 
     private BooleanExpression likeCommonCodeName(String commonCodeName){
         if(commonCodeName == null) return null;
-        return commonCodeEntity.commonCodeName.like(commonCodeName);
+        return commonCodeEntity.commonCodeName.contains(commonCodeName);
     }
 
     private BooleanExpression likeCommonCodeDisplayName(String commonCodeDisplayName){
         if(commonCodeDisplayName == null) return null;
-        return commonCodeEntity.commonCodeDisplayName.like(commonCodeDisplayName);
+        return commonCodeEntity.commonCodeDisplayName.contains(commonCodeDisplayName);
     }
     
 }
