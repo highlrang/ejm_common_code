@@ -43,7 +43,7 @@ public class CommonCodeDetailEntity extends BaseEntity{
     private String commonCodeDetailDisplayName;
     
     public void update(String commonCodeDetailName, String commonCodeDetailDisplayName){
-        this.commonCodeDetailName = commonCodeDetailName;
-        this.commonCodeDetailDisplayName = commonCodeDetailDisplayName;
+        if (commonCodeDetailName != null) this.commonCodeDetailName = commonCodeDetailName;
+        if (commonCodeDetailDisplayName != null) this.commonCodeDetailDisplayName = commonCodeDetailDisplayName;
     }
 }

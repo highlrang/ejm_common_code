@@ -34,6 +34,6 @@ public class RegionEntity extends BaseEntity{
     private long regionParentId;
     
     public void update(String regionName){
-        this.regionName = regionName;
+        if (regionName != null) this.regionName = regionName;
     }
 }

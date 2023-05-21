@@ -79,6 +79,12 @@ create table REGION(
 <br><br>
 
 # API Spec.
+- 요청 시 전달하는 데이터
+    - <b>uri path</b> 파라미터는 경로에 넣어주세요
+    - <b>request</b>는 다음 형식으로 요청해주세요.
+        - Get 메서드 -> query string
+        - Post 메서드 -> json
+
 <b>host</b> `localhost`<br>
 <b>port</b> `8080`<br>
 <br>

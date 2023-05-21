@@ -1,5 +1,6 @@
 package com.myproject.generalapi.commonCode.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myproject.generalapi.commonCode.domain.CommonCodeDetailEntity;
 
 import lombok.Getter;
@@ -11,6 +12,7 @@ public class CommonCodeDetailResponseDto {
 
     private long commonCodeDetailId;
     private long commonCodeId;
+    @JsonIgnore
     private String commonCodeName;
     private String commonCodeDetailName;
     private String commonCodeDetailDisplayName;
